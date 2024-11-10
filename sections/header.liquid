@@ -1,0 +1,400 @@
+{% assign logo_position = section.settings.logo_position %}
+
+{% if logo_position == 'center' %}
+  <div class="logo-center h-width">
+    <div class="header-logo-center header-align">
+      <div class="c-menu">
+        <button class="c-hamburger icon">
+          <i class="ri-menu-2-line"></i>
+        </button>
+        {% comment %} Hamburger BUtton {% endcomment %}
+        <div class="header-drawer-menu">
+          <div class="account-close-button">
+            <div class="account-login">
+              {% if customer %}
+                <div class="account-info">
+                  <p>Welcome, {{ customer.first_name }}</p>
+                  <form
+                    method="post"
+                    action="/account/logout"
+                    id="customer_logout"
+                    accept-charset="UTF-8">
+                    <input type="submit" value="Logout">
+                  </form>
+                </div>
+              {% else %}
+                <p>
+                  <span>
+                    <i class="ri-user-line"></i>
+                  </span>
+                  <a href="/account/login">Log in</a>
+                </p>
+              {% endif %}
+            </div>
+            <button class="c-close icon">
+              <i class="ri-close-large-line"></i>
+            </button>
+          </div>
+          {% comment %} MENU-CODE-START {% endcomment %}
+          <ul class="header-drawer">
+            {% for link in section.settings.navigation.links %}
+              <li class="c-nav-p-item">
+                <a class="c-nav-p-anchor" href="{{ link.url }}">{{ link.title }}</a>
+                {% if link.url == "#" %}
+                  <span class="dropdown-toggle drawer-icon">
+                    <i class="ri-arrow-down-s-line"></i>
+                  </span>
+                  <ul class="header-sub">
+                    {% for child in link.links %}
+                      <li class="header-sub-item">
+                        <a class="header-sub-anchor" href="{{ child.url }}">{{ child.title }}</a>
+                        {% if child.url == "#" %}
+                          <span class="dropdown-toggle-2 drawer-icon">
+                            <i class="ri-arrow-down-s-line"></i>
+                          </span>
+                          <ul class="header-grandchild">
+                            {% for grandchild in child.links %}
+                              <li class="header-grandchild-item">
+                                <a class="header-grandchild-anchor" href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+          {% comment %} MENU-CODE-END {% endcomment %}
+          {% comment %} SOCIAL-ICON {% endcomment %}
+
+          {% if section.settings.show_social_icon %}
+            <div class="social-icons">
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.instagram_social_link }}">
+                  <i class="ri-instagram-line"></i>
+                </a>
+              </div>
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.facebook_social_link }}">
+                  <i class="ri-facebook-circle-fill"></i>
+                </a>
+              </div>
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.youtube_social_link }}">
+                  <i class="ri-youtube-fill"></i>
+                </a>
+              </div>
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.twitter_social_link }}">
+                  <i class="ri-twitter-fill"></i>
+                </a>
+              </div>
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.pinterest_social_link }}">
+                  <i class="ri-pinterest-fill"></i>
+                </a>
+              </div>
+              <div class="icon-s">
+                <a target="_blank" href="{{ settings.linkedin_social_link }}">
+                  <i class="ri-linkedin-fill"></i>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+      <div class="c-logo">
+        {% if section.settings.logo != blank %}
+          <a href="/" class="logo">
+            <img src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ shop.name }}">
+          </a>
+        {% elsif shop.name != blank %}
+          <h1>{{ shop.name }}</h1>
+        {% endif %}
+      </div>
+      <div class="c-icons"></div>
+    </div>
+    <div class="n-left-ovrly"></div>
+  </div>
+{% elsif logo_position == 'left' %}
+  <div class="logo-left h-width">
+    <h1>left</h1>
+  </div>
+{% elsif logo_position == 'right' %}
+  <div class="logo-right h-width">
+    <h1>right</h1>
+  </div>
+{% endif %}
+
+<style>
+  .logo img {
+    width: {{ section.settings.logo_width }}px;
+  }
+  .h-width {
+    width: 100%;
+    height: {{ section.settings.header_height }}vh;
+    background-color: {{ section.settings.h_bg_color }};
+    padding: 2vh 3vw;
+  }
+  .header-align {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .icon {
+    cursor: pointer;
+    font-size: {{ section.settings.icon_size }}px;
+    color: {{ section.settings.icon_color |  default: "inherit" }};
+  }
+  .drawer-icon {
+    cursor: pointer;
+    font-size: {{ section.settings.drawer_icon_size }}px;
+    color: {{ section.settings.icon_color |  default: "inherit" }};
+  }
+  .dropdown-toggle {
+    border-left: 1px solid black;
+    padding-left: 10px;
+  }
+  .dropdown-toggle-2 {
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 0 2px;
+  }
+
+  .header-drawer-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    z-index: 10;
+    padding: 10px 20px;
+    transform: translateX(-100%);
+    transition: all 0.4s ease;
+
+    .nav-active & {
+      transform: none;
+      transition: all 0.4s ease;
+    }
+  }
+  .n-left-ovrly {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9;
+    opacity: 0;
+    transition: all 0.3s ease;
+
+    .nav-active & {
+      left: 0;
+      opacity: 1;
+      transition: all 0.3s ease;
+    }
+  }
+  .account-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+  }
+
+  /* DRAWER-MENU-STYLE */
+
+  .header-drawer {
+    margin-top: 20px;
+  }
+  .c-nav-p-item {
+    padding: 20px 0;
+    border-bottom: 1px solid black;
+  }
+
+  .c-nav-p-anchor {
+    display: inline-block;
+    width: 80%;
+  }
+  .header-sub-anchor {
+    display: inline-block;
+    width: 83%;
+  }
+
+  .header-drawer-menu .header-drawer .header-sub {
+    display: none;
+  }
+
+  .header-drawer-menu .header-drawer .header-grandchild {
+    display: none;
+  }
+
+  .drawer-icon.open i {
+    transform: rotate(180deg);
+  }
+
+  .drawer-icon.open + .header-sub {
+    display: block;
+    margin-top: 20px;
+  }
+  .drawer-icon.open + .header-grandchild {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .header-sub-item {
+    padding: 10px 0;
+  }
+
+  .header-grandchild {
+    border-left: 1px solid black;
+    padding-left: 10px;
+  }
+
+  /* SOCIAL-ICON-STYLE */
+
+  .social-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 40px 0;
+  }
+
+  .icon-s {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e1e1e1;
+    height: 40px;
+  }
+
+  .icon-s a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .icon-s i {
+    font-size: {{ section.settings.icon_size }}px;
+  }
+
+</style>
+<script>
+    document.querySelector('.c-hamburger').addEventListener('click', () => {
+    document.querySelector('.header').classList.toggle('nav-active');
+  });
+  
+    document.querySelector('.n-left-ovrly').addEventListener('click', () => {
+    document.querySelector('.header').classList.remove('nav-active');
+  });
+  
+  document.querySelectorAll('.c-close').forEach(closeButton => {
+        closeButton.addEventListener('click', () => {
+            document.querySelector('.header').classList.remove('nav-active');
+        });
+    });
+  
+    document.querySelectorAll('.drawer-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const submenu = icon.nextElementSibling;
+        icon.classList.toggle('open');
+        submenu.classList.toggle('show');
+        icon.querySelector('i').classList.toggle('ri-arrow-down-s-line');
+        icon.querySelector('i').classList.toggle('ri-arrow-up-s-line');
+    });
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Header",
+    "class": "header",
+    "tag": "header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "default": 100,
+        "min": 50,
+        "max": 200,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width"
+      },
+      {
+        "type": "select",
+        "id": "logo_position",
+        "label": "Logo Position",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "right",
+            "label": "dutta"
+          }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "range",
+        "id": "header_height",
+        "label": "Header Height",
+        "default": 10,
+        "min": 5,
+        "max": 20,
+        "step": 5,
+        "unit": "vh"
+      }, {
+        "type": "color",
+        "id": "h_bg_color",
+        "label": "Header Background Color",
+        "default": "#fefefe"
+      }, {
+        "type": "range",
+        "id": "icon_size",
+        "label": "Icon Size",
+        "unit": "px",
+        "default": 24,
+        "min": 16,
+        "max": 40,
+        "step": 8
+      }, {
+        "type": "range",
+        "id": "drawer_icon_size",
+        "label": "Drawer Icon Size",
+        "unit": "px",
+        "default": 16,
+        "min": 16,
+        "max": 40,
+        "step": 8
+      }, {
+        "type": "color",
+        "id": "icon_color",
+        "label": "Icon Color"
+      }, {
+        "type": "link_list",
+        "id": "navigation",
+        "label": "Navigation Menu",
+        "default": "main-menu"
+      }, {
+        "type": "checkbox",
+        "id": "show_social_icon",
+        "label": "Show Social Icon",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}
